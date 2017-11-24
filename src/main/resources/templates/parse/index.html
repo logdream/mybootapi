@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org">
+<head th:include="common/head">
+</head>
+<script src="js/load-min.js"></script>
+<link href="https://cdn.bootcss.com/jquery-modal/0.8.2/jquery.modal.css"
+	rel="stylesheet">
+<script
+	src="https://cdn.bootcss.com/jquery-modal/0.8.2/jquery.modal.min.js"></script>
+<body>
+	<style>
+.mask {
+	width: 100%;
+	height: 100%;
+	background-color: rgba(242, 242, 242, 0.5);
+	position: fixed;
+	left: 0;
+	top: 0;
+	text-align: center;
+	display: -webkit-flex;
+	display: flex;
+	-webkit-align-items: center;
+	align-items: center;
+	-webkit-justify-content: center;
+	justify-content: center;
+}
+
+.mdl-layout__drawer-button {
+	/* This background is dark, so we set text to white. Use 87% black instead if
+     your background is light. */
+	color: 87% black;
+}
+
+.mask>div {
+	border: 1px solid #D0D0D0;
+	font-size: 12px;
+	padding: 5px 15px;
+	max-width: 150px;
+	color: #494A5F;
+	background: url(loading.gif) no-repeat 5px 5px;
+	padding-left: 25px;
+	background-color: #FFFFFF;
+	word-wrap: break-word;
+	margin: 0 auto;
+}
+
+.scroll-off {
+	position: fixed;
+	overflow-y: hidden
+}
+
+::-moz-selection {
+	background-color: #6ab344;
+	color: #fff;
+}
+
+::selection {
+	background-color: #6ab344;
+	color: #fff;
+}
+
+.android-search-box .mdl-textfield__input {
+	color: white;
+}
+
+.android-header .mdl-menu__container {
+	z-index: 50;
+	margin: 0 !important;
+}
+
+.display-3 {
+	color: white
+}
+
+#url {
+	width: 300px;
+	color: white;
+}
+
+.mdl-layout__content {
+	display: -webkit-flex; /* Safari */
+	display: flex;
+	flex-direction: column;
+	justify-content: start;
+	align-items: center;
+	background-size: cover;
+	background-color: #000000;
+	background-position: center;
+}
+
+.page-content {
+	display: -webkit-flex; /* Safari */
+	display: flex;
+	justify-content: flex-end;
+	align-items: center;
+	flex-direction: column;
+	flex-wrap: wrap;
+	justify-content: space-around;
+}
+
+.baseicFlex {
+	display: -webkit-flex; /* Safari */
+	display: flex;
+}
+
+.result-content {
+	display: -webkit-flex; /* Safari */
+	display: flex;
+	align-items: center;
+	flex-direction: column;
+	justify-content: space-around;
+	flex-wrap: warp;
+	align-content: center;
+}
+
+#videoCon {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: center;
+}
+
+.linkList {
+	display: flex;
+}
+.linkList2{
+display: flex;
+width: 300px;
+justify-content: space-around;
+}
+.otherlist {
+	margin: 10px;
+}
+
+#videoDiv {
+	width: 90% padding: 5px;
+	z-index: 1000;
+	margin: 10px
+}
+
+.modal {
+	width: 100%;
+	max-width: 100%;
+}
+</style>
+	<div class="mdl-layout mdl-js-layout">
+		<header class="mdl-layout__header">
+			<div class="mdl-layout__header-row">
+				<div class="mdl-layout-spacer"></div>
+				<div id="searchBar"
+					class="mdl-textfield mdl-js-textfield mdl-textfield--expandable
+                  mdl-textfield--floating-label mdl-textfield--align-right">
+					<label class="mdl-button mdl-js-button mdl-button--icon"
+						for="fixed-header-drawer-exp"> <i class="material-icons"
+						onclick="gotoGet()">search</i>
+					</label>
+					<div class="mdl-textfield__expandable-holder android-search-box">
+						<input class="mdl-textfield__input" type="text" name="sample"
+							id="url">
+					</div>
+				</div>
+			</div>
+		</header>
+
+		<div class="mdl-layout__drawer">
+			<span class="mdl-layout-title" id="linkList">相关</span>
+		</div>
+		<main class="mdl-layout__content">
+		<div id="videoDiv" draggable="true">
+			<video width="100%" id="myVideo" src="" preload="auto"
+				autoplay="autoplay" controls="" class="embed-responsive-item"
+				draggable="true">
+			</video>
+		</div>
+		<div class="page-content">
+
+			<div id="videoInfo" class="linkList"></div>
+			<div id="videoCon" class="linkList"></div>
+			<!-- Colored mini FAB button -->
+		<div class="linkList2">
+		<button
+			class="mdl-button mdl-js-button mdl-button--fab mdl-button--colored"
+			id="toggle-btn">
+			<i class="material-icons">restore</i>
+		</button>
+		<button
+			class="mdl-button mdl-js-button mdl-button--fab mdl-button--colored"
+			id="forward_30">
+			<i class="material-icons">forward_30</i>
+		</button>
+		
+		<button
+			class="mdl-button mdl-js-button mdl-button--fab  mdl-button--colored"
+			id="toggle-next">
+			<i class="material-icons">skip_next</i>
+		</button>
+		<button
+			class="mdl-button mdl-js-button mdl-button--fab  mdl-button--colored"
+			id="toggle-bigger">
+			<i class="material-icons">add</i>
+		</button>
+		</div>
+		</div>
+		
+		</main>
+		<div id="demo-toast-example" class="mdl-js-snackbar mdl-snackbar">
+			<div class="mdl-snackbar__text"></div>
+			<button class="mdl-snackbar__action" type="button"></button>
+		</div>
+	</div>
+	<script type="text/javascript">
+		var streamArray = new Array();
+		var nowShow = null;
+		var changeBg = true;
+		var t = null;
+		
+
+		function getYouku(url) {
+			$(".result-content").show();
+			var dd = {};
+			dd.url = url||$("#url").val();
+			if(!dd.url||dd.url.indexOf("youku")<0){
+				alert("请输入正确的链接")
+				return false;
+			}
+			dd.type = "youku";
+			if(changeBg)
+				$.mask_element('body');
+			localStorage.lasturl = dd.url;
+			$("#url").val(dd.url);
+			$.post("/parse", dd, function(data) {
+				console.log(data);
+				var json = JSON.parse(data);
+				if(!json.data||json.data.length<1){
+					alert(json.e);
+					return false;
+				}
+				$("#linkList").children().remove();
+				$("#videoCon").children().remove();
+				$("#videoInfo").children().remove();
+				if(json.data.video.title)
+					$("#videoInfo").append("<h4 class='display-3'>"+ json.data.video.title +"</h4>")
+				if(json.data.videos.next){
+					addNextUrl(json.data.videos.next.encodevid);
+				}
+				else{
+					addNextUrl("");
+				}
+				for(let i in json.data.stream){
+					streamArray[i] = (json.data.stream[i]);
+					$("#videoCon").append('<div class="otherlist"><button class="mdl-button mdl-js-button  mdl-button--raised showVideoBtn" onclick="showVideo('
+							+
+							i
+							+',this)">'+json.data.stream[i].stream_type+'</button></div>');
+					
+				}
+				for(let i in json.data.videos.list){
+					$("#linkList").append('<div class="otherlist"><button class="mdl-button mdl-js-button mdl-button--accent mdl-button--raised" onclick="getYouku(\'http://v.youku.com/v_show/id_'
+							+
+							json.data.videos.list[i].encodevid
+							+'.html\')">'+json.data.videos.list[i].title+'</button></div>');
+				}
+			if(changeBg){
+				$.mask_close('body');
+				setBg(json.data.show);
+				var snackbarContainer = document.querySelector('#demo-toast-example');
+				var data = {message: '加载成功 '};
+			    snackbarContainer.MaterialSnackbar.showSnackbar(data);
+				//$("#myvideo").attr("src", videoUrl);
+			    $(".showVideoBtn:first").trigger('click');
+				}
+			
+			});
+
+		}
+		function showVideo(i,my){
+			nowShow = i;
+			$("#myVideo").attr('src',streamArray[i].m3u8_url);
+			
+			//绑定定时事件，4分钟重写调用接口，防止服务器禁止
+			if(t){ //如果有先取消
+				window.clearInterval(t);
+			}
+			$(".showVideoBtn").removeClass('mdl-button--colored');
+			$(my).addClass("mdl-button--colored");
+			t = setInterval("reRequestVideo()", 160000);
+		}
+		function gotoGet(){
+			
+			if($("#url").val()){
+				changeBg = true;
+				getYouku();
+			}
+			console.log($("#searchBar").attr("class"));
+		}
+		function setBg(showObj){
+			var backgroudUrl = "";
+			if (MobileUA.SMART_PHONE){
+				if(showObj.show_vthumburl_huge ){
+					backgroudUrl = showObj.show_vthumburl_huge ;
+				}
+			}
+			else{
+				if(showObj.show_thumburl_huge){
+					
+					backgroudUrl = showObj.show_thumburl_huge;
+				}
+			}
+			if(!backgroudUrl){
+				backgroudUrl = showObj.show_thumburl_huge;
+			}
+			$(".mdl-layout__content").css("background-image","url(" + backgroudUrl + ")");
+			
+		}
+	 
+		    var MobileUA = (function() {  
+		        var ua = navigator.userAgent.toLowerCase();  
+		        var mua = {  
+		            IOS: /ipod|iphone|ipad/.test(ua), //iOS  
+		            IPHONE: /iphone/.test(ua), //iPhone  
+		            IPAD: /ipad/.test(ua), //iPad  
+		            ANDROID: /android/.test(ua), //Android Device  
+		            WINDOWS: /windows/.test(ua), //Windows Device  
+		            TOUCH_DEVICE: ('ontouchstart' in window) || /touch/.test(ua), //Touch Device  
+		            MOBILE: /mobile/.test(ua), //Mobile Device (iPad)  
+		            ANDROID_TABLET: false, //Android Tablet  
+		            WINDOWS_TABLET: false, //Windows Tablet  
+		            TABLET: false, //Tablet (iPad, Android, Windows)  
+		            SMART_PHONE: false //Smart Phone (iPhone, Android)  
+		        };  
+		  
+		        mua.ANDROID_TABLET = mua.ANDROID && !mua.MOBILE;  
+		        mua.WINDOWS_TABLET = mua.WINDOWS && /tablet/.test(ua);  
+		        mua.TABLET = mua.IPAD || mua.ANDROID_TABLET || mua.WINDOWS_TABLET;  
+		        mua.SMART_PHONE = mua.MOBILE && !mua.TABLET;  
+		  
+		        return mua;  
+		    }());
+		    var current =null;
+	$(function(){
+		/* 单击选择网址输入框 */
+        $("#url").click(
+            function() {
+                $(this).select();
+            }
+        );
+      //回车事件
+        $(document).keydown(function(event){
+            if(event.keyCode == "13"){
+            	getYouku();
+            }
+        });
+
+		let lastUrl = localStorage.lasturl;
+		if(lastUrl){
+			$("#url").val(lastUrl);
+			getYouku(lastUrl);
+		}
+		function toggleVideo(e){  
+	        //当前播放时间  
+	        if(current)
+	        var curTime=e.currentTime;  
+	        e.currentTime = current;
+	      }  
+	  
+	      $('#toggle-btn').click(function(){  
+	        toggleVideo(myVideo);  
+	      }) ;
+	      $("#toggle-next").click(function(){
+	    	  gotonext();
+	      });
+	      $("#forward_30").click(function(){
+	    	  var videoObje = document.getElementById("myVideo");
+	    	  videoObje.currentTime = videoObje.currentTime+30;
+	      });
+	      $("#toggle-bigger").click(function(){
+	    	  console.log(11);
+	    	  let videoObj = document.getElementById("myVideo");
+	    	  let videoRealWith = videoObj.attr('videoWidth');
+	    	  console.log(videoRealWith);
+	    	  videoObje.attr('width',videoRealWith);
+	    	  
+	      });
+	});
+	
+	function reRequestVideo(){
+		changeBg = false;
+		getYouku();
+		var videoObje = document.getElementById("myVideo");
+		 current = videoObje.currentTime;
+		$("#myVideo").attr('src',streamArray[nowShow].m3u8_url);
+		videoObje.onplay = function(t){
+			//svideoObje.currentTime = current;
+			//videoObje.currentTime = current;
+			setTimeout("$('#toggle-btn').trigger('click')",2000);
+		};
+		
+	}
+	function showMsg(msg){
+		var snackbarContainer = document.querySelector('#demo-toast-example');
+		var data = {message: msg};
+	    snackbarContainer.MaterialSnackbar.showSnackbar(data);
+	}
+	function addNextUrl(encodeVid){
+		if(encodeVid){
+			$("#toggle-next").attr('data-op',encodeVid);
+		}
+	}
+	function gotonext(){
+		var vid =$("#toggle-next").attr('data-op');
+		if(vid){
+			var url = 'http://v.youku.com/v_show/id_'+vid+"==.html";
+			getYouku(url);
+			current = 0.0;
+		}
+	}
+	</script>
+</body>
+</html>
