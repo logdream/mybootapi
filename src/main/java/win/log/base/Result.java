@@ -4,13 +4,14 @@ public class Result<T> {
 
 	private boolean isok;
 	private String desc;
-	private T t;
+	private T data;
 	
-	public T getT() {
-		return t;
+	
+	public T getData() {
+		return data;
 	}
-	public void setT(T t) {
-		this.t = t;
+	public void setData(T data) {
+		this.data = data;
 	}
 	public boolean isIsok() {
 		return isok;

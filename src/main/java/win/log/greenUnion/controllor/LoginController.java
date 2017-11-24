@@ -22,7 +22,7 @@ public class LoginController {
 		Integer into = new Random().nextInt(20);
 		if(into<15){
 		Result<Token> token = new Result<>(true);
-				token.setT(new Token(account));
+				token.setData(new Token(account));
 				return token;
 		}
 		else{
@@ -37,7 +37,7 @@ public class LoginController {
 		Integer into = new Random().nextInt(20);
 		if(into<15){
 		Result<Token> token = new Result<>(true);
-				token.setT(new Token("admin"));
+				token.setData(new Token("admin"));
 				return token;
 		}
 		else{

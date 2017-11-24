@@ -31,7 +31,7 @@ public class ModuleController {
     @ApiOperation("修改")
     public Result  update(@RequestBody Module t) {
         Result result = new Result();
-        result.setT(t);
+        result.setData(t);
         return result;
     }
 	

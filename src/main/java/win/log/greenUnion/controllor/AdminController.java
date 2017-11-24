@@ -3,6 +3,7 @@ package win.log.greenUnion.controllor;
 import java.util.Random;
 import java.util.UUID;
 
+import org.springframework.beans.factory.annotation.Required;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import io.swagger.annotations.Api;
@@ -40,7 +42,6 @@ public class AdminController {
     public Result<Admin>  add(@RequestBody Admin t) {
 		Result<Admin> res = new Result<>(true);
 		t.setId(UUID.randomUUID().toString());
-		res.setT(t);
 		return res;
     }
 
@@ -52,7 +53,7 @@ public class AdminController {
     @ApiOperation("修改")
     public Result<Admin>  update(@RequestBody Admin t) {
         Result<Admin> result = new Result<Admin>();
-        result.setT(t);
+        result.setData(t);
         return result;
     }
 	@GetMapping("/disable/{id}")
@@ -61,7 +62,7 @@ public class AdminController {
 	     Result<Admin> result = new Result<Admin>(true);
 	     Admin t = (get(id));
 	     t.setState("0");
-	     result.setT(t);
+	     result.setData(t);
 		return result;
 	}
 	
@@ -73,13 +74,16 @@ public class AdminController {
 		 Result<Admin> result = new Result<Admin>(true);
 		 Admin t = (get(id));
 	     t.setState("1");
-	     result.setT(t);
+	     result.setData(t);
 		return null;
 	}
 	@PostMapping("/list")
 	@ApiOperation("查询")
-	public Page<Admin> list(){
-		return null;
+	public Page<Admin> list(@RequestParam(name = "page", defaultValue = "1") int page,
+			@RequestParam(name = "size", defaultValue = "15") int rows,
+			@RequestParam(name = "searchs",required=false) String searchs,@RequestParam(name="sorts",required=false)String sorts){
+		Admin admin = new Admin();
+		return admin.preparePage(page,rows);
 	}
 
 }

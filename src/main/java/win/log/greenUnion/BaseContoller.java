@@ -20,7 +20,7 @@ public  class BaseContoller<T extends BaseModel<T>> {
 	@ApiOperation("添加")
 	public Result<T> add(@RequestBody T t) {
 		Result<T> result = new Result<T>();
-		result.setT(t);
+		result.setData(t);
 		return result;
 	}
 
@@ -31,7 +31,7 @@ public  class BaseContoller<T extends BaseModel<T>> {
 	@ApiOperation("修改")
 	public Result<T> update(@RequestBody T t) {
 		Result<T> result = new Result<T>();
-		result.setT(t);
+		result.setData(t);
 		return result;
 	}
 

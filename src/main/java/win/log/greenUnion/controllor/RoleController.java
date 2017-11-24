@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import io.swagger.annotations.Api;
@@ -30,7 +31,7 @@ public class RoleController {
     public Result<Role>  add(@RequestBody Role t) {
 		t.setId(UUID.randomUUID().toString());
 		Result<Role> r = new Result<Role>(true);
-		r.setT(t);
+		r.setData(t);
 		return r;
     }
 
@@ -43,15 +44,17 @@ public class RoleController {
     @ApiOperation("修改")
     public Result<Role>  update(@RequestBody Role t) {
         Result<Role> result = new Result(true);
-        result.setT(t);
+        result.setData(t);
         return result;
     }
 	
 	@PostMapping("/list")
 	@ApiOperation("查询")
-	public Page<Role> list(@RequestBody Role t){
+	public Page<Role> list(@RequestParam(name = "page", defaultValue = "0") int page,
+			@RequestParam(name = "size", defaultValue = "15") int rows,
+			@RequestParam(name = "searchs",required=false) String searchs,@RequestParam(name="sorts",required=false)String sorts){
 		Role role = new Role();
-		return role.preparePage();
+		return role.preparePage(page,rows);
 	}
 	
 	
@@ -78,7 +81,7 @@ public class RoleController {
 		Module mo = new Module();
 		return mo.greatePage(5);
 	}
-	@ApiOperation(value="移除意见勾选的权限")
+	@ApiOperation(value="移除已经勾选的权限")
 	@PostMapping("/removeModule")
 	public Result<String> removeModule(@ApiParam(required = true, value = "角色代码")String roleCode,
 			@ApiParam(required = true, value = "模块代码")String moduleCode,

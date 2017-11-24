@@ -35,21 +35,9 @@ public class Role extends BaseModel<Role>{
 		// TODO Auto-generated method stub
 		Role role = new Role();
 		role.id = UUID.randomUUID().toString();
-		this.code = "admin";
-		this.name = "管理员";
-		return null;
+		role.code = "admin_"+Word.getRandomStr(4);
+		role.name = "管理员_"+Word.getRandomCnStr(2);
+		return role;
 	}
-	@Override
-	public List<Role> greatePage(){
-		int size = new Random().nextInt(50);
-		
-		List<Role> list = new ArrayList<>(size);
-		for(int i=0;i<size;i++){
-			Role role = new Role();
-			role.setName(Word.getRandomCnStr(6));
-			role.setCode(Word.getRandomStr(6));
-			list.add(role);
-		}
-		return list;
-	}
+	
 }

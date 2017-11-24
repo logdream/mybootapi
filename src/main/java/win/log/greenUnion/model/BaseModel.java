@@ -1,21 +1,31 @@
 package win.log.greenUnion.model;
 
-import java.beans.PropertyDescriptor;
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
 
 public abstract class BaseModel<T> {
 
 	public abstract T newInstance();
 	
 	public 	Page<T> preparePage(){
-		Page<T> t = new PageImpl<>(greatePage());
+		Sort sort = new Sort(Direction.DESC, "id");
+	    Pageable pageable = new PageRequest(0, 15, sort);
+	    List<T> ts = greatePage();
+		Page<T> t = new PageImpl<T>(greatePage(),pageable,Long.parseLong(ts.size()+""));
+		return t;
+	}
+	public 	Page<T> preparePage(int page,int size){
+	    Pageable pageable = new PageRequest(page, size, null);
+	    List<T> ts = greatePage(size);
+		Page<T> t = new PageImpl<T>(ts,pageable,200);
 		return t;
 	}
 	
