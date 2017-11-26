@@ -6,6 +6,7 @@ import java.util.UUID;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import win.log.base.RequestList;
 import win.log.base.Result;
 import win.log.greenUnion.model.Admin;
 import win.log.greenUnion.model.Module;
@@ -50,11 +52,9 @@ public class RoleController {
 	
 	@PostMapping("/list")
 	@ApiOperation("查询")
-	public Page<Role> list(@RequestParam(name = "page", defaultValue = "0") int page,
-			@RequestParam(name = "size", defaultValue = "15") int rows,
-			@RequestParam(name = "searchs",required=false) String searchs,@RequestParam(name="sorts",required=false)String sorts){
+	public Page<Role> list(@RequestBody RequestList requestList){
 		Role role = new Role();
-		return role.preparePage(page,rows);
+		return role.preparePage(requestList.getCurrent(),requestList.getPageSize());
 	}
 	
 	

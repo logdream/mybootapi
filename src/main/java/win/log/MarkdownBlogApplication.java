@@ -11,9 +11,10 @@ import org.springframework.web.filter.CorsFilter;
 public class MarkdownBlogApplication {
 	private CorsConfiguration buildConfig() {  
         CorsConfiguration corsConfiguration = new CorsConfiguration();  
-        corsConfiguration.addAllowedOrigin("*");  
+        corsConfiguration.addAllowedOrigin("http://localhost:8000");  
         corsConfiguration.addAllowedHeader("*");  
-        corsConfiguration.addAllowedMethod("*");  
+        corsConfiguration.addAllowedMethod("*"); 
+        corsConfiguration.setAllowCredentials(true);
         return corsConfiguration;  
     } 
 	 /** 
