@@ -11,6 +11,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
 
+import win.log.base.GuResult;
+
 public abstract class BaseModel<T> {
 
 	public abstract T newInstance();
@@ -29,6 +31,12 @@ public abstract class BaseModel<T> {
 		return t;
 	}
 	
+	public GuResult<T> prepareGuPage(int page,int size){
+		 List<T> ts = greatePage(size);
+		 GuResult<T> tGuResult = new GuResult<T>(page, size, ts, 200);
+		 return tGuResult;
+		
+	}
 	
 	public List<T> greatePage(){
 		int size = new Random().nextInt(50);

@@ -2,7 +2,9 @@ package win.log.greenUnion.controllor;
 
 import java.util.Random;
 
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -10,6 +12,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import win.log.base.Result;
+import win.log.greenUnion.model.Admin;
 import win.log.greenUnion.model.Token;
 
 @RestController
@@ -49,14 +52,17 @@ public class LoginController {
 	}
 	
 	@ApiOperation(value="验证是否登陆,在访问需要授权的页面会访问此方法25%失败")
-	@PostMapping("/verify")
-	public Result<String> verify(String account,@ApiParam(required = true, value = "用户id")String id){
+	@GetMapping("/verify")
+	public Result<Admin> verify(@RequestHeader(name="Authorization")String bearer ){
 		Integer into = new Random().nextInt(20);
+		Admin admin = new Admin();
 		if(into<15){
-		return  new Result<String>(true);
+			Result<Admin> aResult = 	new Result<Admin>(true);
+			aResult.setData(admin.newInstance());
+		return  aResult;
 		}
 		else{
-			return  new Result<String>(false);
+			return  new Result<Admin>(false);
 		}
 	}
 	
