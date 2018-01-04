@@ -1,14 +1,8 @@
 package win.log.greenUnion.model;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.Date;
-import java.util.List;
+import java.util.Random;
 import java.util.UUID;
-
-import org.apache.commons.io.FileUtils;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import win.log.greenUnion.Word;
 
@@ -16,12 +10,13 @@ public class TrainingMaterial extends BaseModel<TrainingMaterial>{
 
 	private static String tempContent;
 	private String id;
-	private String categoryID;
+	private String categoryId;
 	private String title;
 	private String summary;
 	private String state;
 	private String content;
 	private String tags;
+	private Integer sort;
 	public String getContent() {
 		return content;
 	}
@@ -30,6 +25,12 @@ public class TrainingMaterial extends BaseModel<TrainingMaterial>{
 	}
 	public String getTags() {
 		return tags;
+	}
+	public Integer getSort() {
+		return new Random().nextInt(1000);
+	}
+	public void setSort(Integer sort) {
+		this.sort = sort;
 	}
 	public void setTags(String tags) {
 		this.tags = tags;
@@ -44,11 +45,11 @@ public class TrainingMaterial extends BaseModel<TrainingMaterial>{
 	public void setId(String id) {
 		this.id = id;
 	}
-	public String getCategoryID() {
-		return categoryID;
+	public String getCategoryId() {
+		return categoryId;
 	}
-	public void setCategoryID(String categoryID) {
-		this.categoryID = categoryID;
+	public void setCategoryId(String categoryID) {
+		this.categoryId = categoryID;
 	}
 	public String getTitle() {
 		return title;
@@ -103,7 +104,7 @@ public class TrainingMaterial extends BaseModel<TrainingMaterial>{
 		helpDesk.setId(UUID.randomUUID().toString());
 		helpDesk.setTitle(Word.getRandomCnStr(20));
 		helpDesk.setSummary(Word.getRandomCnStr(100));
-		helpDesk.setCategoryID(UUID.randomUUID().toString());
+		helpDesk.setCategoryId(UUID.randomUUID().toString());
 		helpDesk.setCreateTime(new Date());
 		helpDesk.setModifyTime(new Date());
 		helpDesk.setCreateUser(admin.newInstance());

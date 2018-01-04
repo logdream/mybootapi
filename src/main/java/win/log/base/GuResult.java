@@ -29,6 +29,8 @@ public class GuResult<T> {
 		super();
 		this.code = 200;
 		this.message = "成功";
+		GUlist<T> tGUlist = new GUlist<>();
+		this.result = tGUlist;
 		
 	}
 	
